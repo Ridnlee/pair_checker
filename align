@@ -1,0 +1,30 @@
+#!/bin/bash
+ext_jpg="JPG"
+ext_raw="CR2"
+f=`find ${1} -iname \*.$ext_jpg -or -name \*.$ext_raw`
+echo "Start checking ${1}"
+rm_cnt=0
+chk_cnt=0
+for file in $f
+do
+ let "chk_cnt=chk_cnt+1"
+ filename="${file%.*}"
+ ext="${file##*.}"
+ ext="${ext^^}"
+ if [[ $ext = $ext_jpg ]]; then
+  search_file=$filename'.'$ext_raw
+  search_file_l=$filename'.'"${ext_raw,,}"
+ else 
+  if [[ $ext = $ext_raw ]]; then
+   search_file=$filename'.'$ext_jpg
+   search_file_l=$filename'.'"${ext_jpg,,}"
+  fi
+ fi
+   
+ if [[ ! -f $search_file && ! -f  $search_file_l ]]; then
+  let "rm_cnt=rm_cnt+1"
+  echo "Remove file $file"
+  rm -rf $file
+ fi
+done
+echo "End checking. Checked $chk_cnt files. Removed $rm_cnt files."
