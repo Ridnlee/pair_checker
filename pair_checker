@@ -23,6 +23,7 @@ do
    
  if [[ ! -f $search_file && ! -f  $search_file_l ]]; then
   let "rm_cnt=rm_cnt+1"
+  let "chk_cnt=chk_cnt+1"
   echo "Remove file $file"
   rm -rf $file
  fi
